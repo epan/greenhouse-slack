@@ -23,7 +23,12 @@ app.post('/greenhouse-event', function (req, res) {
   var job = content.payload.application.jobs[0].name;
   console.log(job);
   var message = name + " applied to " + job;
-  res.json(message);
+  slack.send({
+    icon_emoji: ':eyes:',
+    username: 'New Applicant',
+    text: message
+  });
+  res.status(200);
 });
 
 app.listen(app.get('port'), function() {
