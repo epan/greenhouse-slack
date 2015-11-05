@@ -26,7 +26,7 @@ app.post('/greenhouse-event', function (req, res) {
   slack.send({
     icon_emoji: ':eyes:',
     username: 'New Applicant',
-    text: 'the medium is the message',
+    text: message,
     attachments: [
       {
         fallback: 'this is fallback text',
