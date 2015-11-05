@@ -1,0 +1,24 @@
+{
+  "name": "greenhouse-slack",
+  "version": "1.0.0",
+  "description": "greenhouse webhooks to slack",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epan/greenhouse-slack.git"
+  },
+  "author": "EP",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/epan/greenhouse-slack/issues"
+  },
+  "homepage": "https://github.com/epan/greenhouse-slack#readme",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "slack-notify": "^0.1.4"
+  }
+}
