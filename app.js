@@ -26,9 +26,18 @@ app.post('/greenhouse-event', function (req, res) {
   slack.send({
     icon_emoji: ':eyes:',
     username: 'New Applicant',
-    text: message
+    text: 'the medium is the message',
+    attachments: [
+      {
+        fallback: 'this is fallback text',
+        fields: [
+          { title: 'Portfolio', value: job, short: true },
+          { title: 'Greenhouse Page', value: 'URL', short: true }
+        ]
+      }
+    ]
   });
-  res.status(200);
+  res.sendStatus(200);
 });
 
 app.listen(app.get('port'), function() {
