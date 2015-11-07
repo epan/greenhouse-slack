@@ -17,19 +17,23 @@ app.get('/', function (req, res) {
   res.send('Hullo Werld!');
 });
 
+app.get('/greenhouse-event', function (req, res) {
+  res.send('Feed me Greenhouse webhooks plz thx.');
+});
+
 app.post('/greenhouse-event', function (req, res) {
   var content = req.body;
   var name = content.payload.application.candidate.first_name + " " + content.payload.application.candidate.last_name;
   var job = content.payload.application.jobs[0].name;
-  console.log(job);
-  var message = name + " applied to " + job;
+  var message = name + ' applied to ' + job;
+
   slack.send({
     icon_emoji: ':eyes:',
     username: 'New Applicant',
     text: message,
     attachments: [
       {
-        fallback: 'this is fallback text',
+        fallback: 'Check Greenhouse for more details.',
         fields: [
           { title: 'Portfolio', value: job, short: true },
           { title: 'Greenhouse Page', value: 'URL', short: true }
@@ -37,6 +41,7 @@ app.post('/greenhouse-event', function (req, res) {
       }
     ]
   });
+
   res.sendStatus(200);
 });
 
