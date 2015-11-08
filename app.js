@@ -19,9 +19,12 @@ app.get('/', function (req, res) {
 
 app.get('/greenhouse-event', function (req, res) {
   res.send('Feed me Greenhouse webhooks plz thx.');
+  res.sendStatus(200);
 });
 
 app.post('/greenhouse-event', function (req, res) {
+  res.sendStatus(200);
+
   var content = req.body;
   var name = content.payload.application.candidate.first_name + " " + content.payload.application.candidate.last_name;
   var job = content.payload.application.jobs[0].name;
@@ -41,8 +44,6 @@ app.post('/greenhouse-event', function (req, res) {
       }
     ]
   });
-
-  res.sendStatus(200);
 });
 
 app.listen(app.get('port'), function() {
