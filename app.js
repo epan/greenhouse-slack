@@ -23,28 +23,85 @@ app.get('/greenhouse-event', function (req, res) {
 });
 
 app.post('/greenhouse-event', function (req, res) {
+  // Store JSON payload from Greenhouse
+  var content = req.body;
+
+  // Candidate info
+  var candidate_id = content.payload.application.candidate.id;
+  var candidate_name = content.payload.application.candidate.first_name + " " + content.payload.application.candidate.last_name;
+  var candidate_email = content.payload.candidate.email_addresses[0].value;
+  var candidate_email_link = '<mailto:' + candidate_email + '|' + candidate_email + '>';
+
+  // Job and application info
+  var job_name = content.payload.application.jobs[0].name;
+  var application_id = content.payload.application.id;
+  var application_source = content.payload.application.source[0].public_name;
+  var jobs_to_alert = [
+    'Design Manager',
+    'Product Designer',
+    'UX Researcher',
+    'Communications Designer'
+  ];
+
+  // For Slack content string formation
+  var bot_title = '';
+  var message = '';
+  var summary = '';
+  var application_greenhouse_link = '<https://app.greenhouse.io/people/' + candidate_id + '?application_id=' + application_id  + '#candidate_details' + '|View in Greenhouse>';
+
+  // Makes the Greenhouse webhook test ping gods pleased
   res.sendStatus(200);
 
-  var content = req.body;
-  var name = content.payload.application.candidate.first_name + " " + content.payload.application.candidate.last_name;
-  var job = content.payload.application.jobs[0].name;
-  var message = name + ' applied to ' + job;
+  // Format the content for Slack
+  bot_title = 'New Applicant';
+  message = '*' + candidate_name + '*' + ' applied to ' + '*' + job_name + '*';
+  summary = candidate_name + '\n' +
+            job_name + '\n' +
+            'via ' + application_source + '\n' +
+            candidate_email_link + '\n' +
+            application_greenhouse_link;
 
+  // Send the formated message to Slackbot incoming webhook
   slack.send({
     icon_emoji: ':eyes:',
-    username: 'New Applicant',
+    username: bot_title,
     text: message,
     attachments: [
       {
         fallback: 'Check Greenhouse for more details.',
         fields: [
-          { title: 'Portfolio', value: job, short: true },
-          { title: 'Greenhouse Page', value: 'URL', short: true }
+          {
+            title: 'Application',
+            value: summary,
+            short: true
+          }
         ]
       }
     ]
   });
 });
+
+  // Check if job is one of the jobs_to_alert
+  if (jobs_to_alert.indexOf(job_name) > -1) {
+    slack.send({
+      channel: '#design-candidates',
+      icon_emoji: ':eyes:',
+      username: bot_title,
+      text: message,
+      attachments: [
+        {
+          fallback: 'Check Greenhouse for more details.',
+          fields: [
+            {
+              title: 'Application',
+              value: summary,
+              short: true
+            }
+          ]
+        }
+      ]
+    });
+  }
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
