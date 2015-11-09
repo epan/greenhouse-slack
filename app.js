@@ -29,14 +29,14 @@ app.post('/greenhouse-event', function (req, res) {
   // Candidate info
   var candidate_id = content.payload.application.candidate.id;
   var candidate_name = content.payload.application.candidate.first_name + " " + content.payload.application.candidate.last_name;
-  var candidate_email = content.payload.candidate.email_addresses[0].value;
+  var candidate_email = content.payload.application.candidate.email_addresses[0].value;
   var candidate_email_link = '<mailto:' + candidate_email + '|' + candidate_email + '>';
 
   // Job and application info
   var job_name = content.payload.application.jobs[0].name;
   var application_id = content.payload.application.id;
-  var application_source = content.payload.application.source[0].public_name;
-  var jobs_to_alert = [
+  var application_source = content.payload.application.source.public_name;
+  var design_jobs = [
     'Design Manager',
     'Product Designer',
     'UX Researcher',
@@ -79,10 +79,10 @@ app.post('/greenhouse-event', function (req, res) {
       }
     ]
   });
-});
 
   // Check if job is one of the jobs_to_alert
-  if (jobs_to_alert.indexOf(job_name) > -1) {
+  var is_design_jobs = design_jobs.indexOf(job_name) > -1;
+  if (is_design_jobs) {
     slack.send({
       channel: '#design-candidates',
       icon_emoji: ':eyes:',
@@ -102,6 +102,8 @@ app.post('/greenhouse-event', function (req, res) {
       ]
     });
   }
+});
+
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
