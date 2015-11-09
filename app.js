@@ -37,10 +37,10 @@ app.post('/greenhouse-event', function (req, res) {
   var application_id = content.payload.application.id;
   var application_source = content.payload.application.source.public_name;
   var design_jobs = [
-    'Head of Design',
-    'Product Designer',
-    'User Experience Researcher',
-    'Communication Designer'
+    'Head of Design', // job_id: 123548
+    'Product Designer', // job_id: 122173
+    'User Experience Researcher', // job_id: 123549
+    'Communication Designer' // job_id: 123547
   ];
 
   // For Slack content string formation
@@ -64,6 +64,7 @@ app.post('/greenhouse-event', function (req, res) {
   // Send the formated message to Slackbot incoming webhook
   slack.send({
     icon_emoji: ':eyes:',
+    color: '#7CD197',
     username: bot_title,
     text: message,
     attachments: [
