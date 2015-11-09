@@ -64,7 +64,6 @@ app.post('/greenhouse-event', function (req, res) {
   // Send the formated message to Slackbot incoming webhook
   slack.send({
     icon_emoji: ':eyes:',
-    color: '#7CD197',
     username: bot_title,
     text: message,
     attachments: [
@@ -81,11 +80,12 @@ app.post('/greenhouse-event', function (req, res) {
     ]
   });
 
-  // Check if job is one of the jobs_to_alert
+  // Check if job is one of the design_jobs
   var is_design_jobs = design_jobs.indexOf(job_name) > -1;
   if (is_design_jobs) {
     slack.send({
       channel: '#design-candidates',
+      color: '#7CD197',
       icon_emoji: ':eyes:',
       username: bot_title,
       text: message,
