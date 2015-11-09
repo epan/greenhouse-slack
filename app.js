@@ -37,10 +37,10 @@ app.post('/greenhouse-event', function (req, res) {
   var application_id = content.payload.application.id;
   var application_source = content.payload.application.source.public_name;
   var design_jobs = [
-    'Design Manager',
+    'Head of Design',
     'Product Designer',
-    'UX Researcher',
-    'Communications Designer'
+    'User Experience Researcher',
+    'Communication Designer'
   ];
 
   // For Slack content string formation
