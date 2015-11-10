@@ -27,16 +27,16 @@ app.post('/greenhouse-event', function (req, res) {
   var content = req.body;
 
   // Candidate info
-  var candidate_id = content.payload.application.candidate.id;
-  var candidate_name = content.payload.application.candidate.first_name + " " + content.payload.application.candidate.last_name;
-  var candidate_email = content.payload.application.candidate.email_addresses[0].value;
-  var candidate_email_link = '<mailto:' + candidate_email + '|' + candidate_email + '>';
+  var candidateId = content.payload.application.candidate.id;
+  var candidateName = content.payload.application.candidate.first_name + " " + content.payload.application.candidate.last_name;
+  var candidateEmail = content.payload.application.candidate.email_addresses[0].value;
+  var candidateEmailLink = '<mailto:' + candidateEmail + '|' + candidateEmail + '>';
 
   // Job and application info
-  var job_name = content.payload.application.jobs[0].name;
-  var application_id = content.payload.application.id;
-  var application_source = content.payload.application.source.public_name;
-  var design_jobs = [
+  var jobName = content.payload.application.jobs[0].name;
+  var applicationId = content.payload.application.id;
+  var applicationSource = content.payload.application.source.public_name;
+  var designJobs = [
     'Head of Design', // job_id: 123548
     'Product Designer', // job_id: 122173
     'User Experience Researcher', // job_id: 123549
@@ -44,27 +44,27 @@ app.post('/greenhouse-event', function (req, res) {
   ];
 
   // For Slack content string formation
-  var bot_title = '';
+  var botTitle = '';
   var message = '';
   var summary = '';
-  var application_greenhouse_link = '<https://app.greenhouse.io/people/' + candidate_id + '?application_id=' + application_id  + '#candidate_details' + '|View in Greenhouse>';
+  var applicationGreenhouseLink = '<https://app.greenhouse.io/people/' + candidateId + '?applicationId=' + applicationId  + '#candidate_details' + '|View in Greenhouse>';
 
   // Makes the Greenhouse webhook test ping gods pleased
   res.sendStatus(200);
 
   // Format the content for Slack
-  bot_title = 'New Applicant';
-  message = '*' + candidate_name + '*' + ' applied to ' + '*' + job_name + '*';
-  summary = candidate_name + '\n' +
-            job_name + '\n' +
-            'via ' + application_source + '\n' +
-            candidate_email_link + '\n' +
-            application_greenhouse_link;
+  botTitle = 'New Applicant';
+  message = '*' + candidateName + '*' + ' applied to ' + '*' + jobName + '*';
+  summary = candidateName + '\n' +
+            jobName + '\n' +
+            'via ' + applicationSource + '\n' +
+            candidateEmailLink + '\n' +
+            applicationGreenhouseLink;
 
   // Send the formated message to Slackbot incoming webhook
   slack.send({
     icon_emoji: ':eyes:',
-    username: bot_title,
+    username: botTitle,
     text: message,
     attachments: [
       {
@@ -80,14 +80,14 @@ app.post('/greenhouse-event', function (req, res) {
     ]
   });
 
-  // Check if job is one of the design_jobs
-  var is_design_jobs = design_jobs.indexOf(job_name) > -1;
-  if (is_design_jobs) {
+  // Check if job is one of the designJobs
+  var is_designJobs = designJobs.indexOf(jobName) > -1;
+  if (is_designJobs) {
     slack.send({
       channel: '#design-candidates',
       color: '#7CD197',
       icon_emoji: ':eyes:',
-      username: bot_title,
+      username: botTitle,
       text: message,
       attachments: [
         {
