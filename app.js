@@ -48,6 +48,7 @@ app.post('/greenhouse-event', function (req, res) {
   var message = '';
   var summary = '';
   var applicationGreenhouseLink = '<https://app.greenhouse.io/people/' + candidateId + '?applicationId=' + applicationId  + '#candidate_details' + '|View in Greenhouse>';
+  var isDesignJob = false;
 
   // Makes the Greenhouse webhook test ping gods pleased
   res.sendStatus(200);
@@ -81,8 +82,8 @@ app.post('/greenhouse-event', function (req, res) {
   });
 
   // Check if job is one of the designJobs
-  var is_designJobs = designJobs.indexOf(jobName) > -1;
-  if (is_designJobs) {
+  isDesignJob = designJobs.indexOf(jobName) > -1;
+  if (isDesignJob) {
     slack.send({
       channel: '#design-candidates',
       color: '#7CD197',
