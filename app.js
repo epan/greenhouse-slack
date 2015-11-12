@@ -17,30 +17,30 @@ app.get('/', function (req, res) {
   res.send('Hullo Werld!');
 });
 
-app.get('/greenhouse-event', function (req, res) {
-  res.send('Feed me Greenhouse webhooks plz thx.');
+app.get('/new-design-applicant', function (req, res) {
+  res.send('Feed me Greenhouse designer webhooks plz thx.');
   // res.sendStatus(200);
 });
 
-app.post('/greenhouse-event', function (req, res) {
+app.post('/new-design-applicant', function (req, res) {
   // Makes the Greenhouse webhook test ping gods pleased
-  if (req.body.action === 'ping') {
+  if (req.body.action === 'ping' || 'new_candidate_application') {
     res.sendStatus(200);
   }
 
   // Store JSON payload from Greenhouse
-  var content = req.body;
+  var application = req.body.payload.application;
 
   // Candidate info
-  var candidateId = content.payload.application.candidate.id;
-  var candidateName = content.payload.application.candidate.first_name + " " + content.payload.application.candidate.last_name;
-  var candidateEmail = content.payload.application.candidate.email_addresses[0].value;
+  var candidateId = application.candidate.id;
+  var candidateName = application.candidate.first_name + " " + application.candidate.last_name;
+  var candidateEmail = application.candidate.email_addresses[0].value;
   var candidateEmailLink = '<mailto:' + candidateEmail + '|' + candidateEmail + '>';
 
   // Job and application info
-  var jobName = content.payload.application.jobs[0].name;
-  var applicationId = content.payload.application.id;
-  var applicationSource = content.payload.application.source.public_name;
+  var jobName = application.jobs[0].name;
+  var applicationId = application.id;
+  var applicationSource = application.source.public_name;
   var designJobs = [
     'Head of Design', // job_id: 123548
     'Product Designer', // job_id: 122173
