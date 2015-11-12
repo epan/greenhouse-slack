@@ -19,10 +19,15 @@ app.get('/', function (req, res) {
 
 app.get('/greenhouse-event', function (req, res) {
   res.send('Feed me Greenhouse webhooks plz thx.');
-  res.sendStatus(200);
+  // res.sendStatus(200);
 });
 
 app.post('/greenhouse-event', function (req, res) {
+  // Makes the Greenhouse webhook test ping gods pleased
+  if (req.body.action === 'ping') {
+    res.sendStatus(200);
+  }
+
   // Store JSON payload from Greenhouse
   var content = req.body;
 
@@ -49,9 +54,6 @@ app.post('/greenhouse-event', function (req, res) {
   var summary = '';
   var applicationGreenhouseLink = '<https://app.greenhouse.io/people/' + candidateId + '?applicationId=' + applicationId  + '#candidate_details' + '|View in Greenhouse>';
   var isDesignJob = false;
-
-  // Makes the Greenhouse webhook test ping gods pleased
-  res.sendStatus(200);
 
   // Format the content for Slack
   botTitle = 'New Applicant';
@@ -81,7 +83,7 @@ app.post('/greenhouse-event', function (req, res) {
     ]
   });
 
-  // Check if job is one of the designJobs
+  // Check if job is one of the designJobs before sending to Slack
   isDesignJob = designJobs.indexOf(jobName) > -1;
   if (isDesignJob) {
     slack.send({
@@ -105,7 +107,6 @@ app.post('/greenhouse-event', function (req, res) {
     });
   }
 });
-
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
