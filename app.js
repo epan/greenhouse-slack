@@ -52,7 +52,7 @@ app.post('/greenhouse-event', function (req, res) {
   var botTitle = '';
   var message = '';
   var summary = '';
-  var applicationGreenhouseLink = '<https://app.greenhouse.io/people/' + candidateId + '?applicationId=' + applicationId  + '#candidate_details' + '|View in Greenhouse>';
+  var applicationGreenhouseLink = '<https://app.greenhouse.io/people/' + candidateId + '?application_id=' + applicationId  + '#candidate_details' + '|View in Greenhouse>';
   var isDesignJob = false;
 
   // Format the content for Slack
