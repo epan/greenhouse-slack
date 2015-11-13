@@ -23,22 +23,26 @@ app.get('/new-design-applicant', function (req, res) {
 });
 
 app.post('/new-design-applicant', function (req, res) {
+  var json = req.body;
+
   // Makes the Greenhouse webhook test ping gods pleased
-  if (req.body.action === 'ping' || 'new_candidate_application') {
+  if (json.action === 'ping' || json.action === 'new_candidate_application') {
     res.sendStatus(200);
   }
 
   // Store JSON payload from Greenhouse
-  var application = req.body.payload.application;
+  var application = json.payload.application;
+  var candidate = application.candidate;
+  var jobs = application.jobs;
 
   // Candidate info
-  var candidateId = application.candidate.id;
-  var candidateName = application.candidate.first_name + " " + application.candidate.last_name;
-  var candidateEmail = application.candidate.email_addresses[0].value;
+  var candidateId = candidate.id;
+  var candidateName = candidate.first_name + " " + candidate.last_name;
+  var candidateEmail = candidate.email_addresses[0].value;
   var candidateEmailLink = '<mailto:' + candidateEmail + '|' + candidateEmail + '>';
 
   // Job and application info
-  var jobName = application.jobs[0].name;
+  var jobName = jobs[0].name;
   var applicationId = application.id;
   var applicationSource = application.source.public_name;
   var designJobs = [
