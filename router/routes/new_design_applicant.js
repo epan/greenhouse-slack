@@ -8,12 +8,10 @@ var GREENHOUSE_EVENT_SLACK_WEBHOOK_URL = process.env.GREENHOUSE_EVENT_SLACK_WEBH
 var slack = require('slack-notify')(GREENHOUSE_EVENT_SLACK_WEBHOOK_URL);
 
 router.post('/', function (req, res) {
-  var json = req.body;
-
   // Makes the Greenhouse webhook test ping gods pleased
-  if (json.action === 'ping' || json.action === 'new_candidate_application') {
-    res.sendStatus(200);
-  }
+  res.sendStatus(200);
+
+  var json = req.body;
 
   // Store JSON payload from Greenhouse
   var application = json.payload.application;
