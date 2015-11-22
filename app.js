@@ -9,8 +9,7 @@ app.set('port', (process.env.PORT || 5000));
 app.use(bodyParser.json()); // for parsing application/json
 
 // Routes
-var newDesignApplicant = require('./routes/new_design_applicant');
-app.use('/new-design-applicant', newDesignApplicant);
+require('./router')(app);
 
 // Endpoints
 app.get('/', function (req, res) {

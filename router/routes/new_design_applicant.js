@@ -7,11 +7,6 @@ var router = express.Router();
 var GREENHOUSE_EVENT_SLACK_WEBHOOK_URL = process.env.GREENHOUSE_EVENT_SLACK_WEBHOOK_URL;
 var slack = require('slack-notify')(GREENHOUSE_EVENT_SLACK_WEBHOOK_URL);
 
-router.get('/', function (req, res) {
-  res.send('Feed me Greenhouse designer webhooks plz thx.');
-  // res.sendStatus(200);
-});
-
 router.post('/', function (req, res) {
   var json = req.body;
 
