@@ -11,8 +11,6 @@ router.post('/', function (req, res) {
   // Makes the Greenhouse webhook test ping gods pleased
   res.sendStatus(200);
 
-  // TODO parse the applicant change JSON and format slack-notify
-
   // Store JSON payload from Greenhouse
   var json = req.body;
   var application = json.payload.application;
@@ -43,19 +41,23 @@ router.post('/', function (req, res) {
   // String mutation for formatting message to Slack
   var icon = '';
   var message = '';
+  var color = '';
   var applicationGreenhouseLink = '<https://app.greenhouse.io/people/' + candidateId + '?application_id=' + applicationId + '|View in Greenhouse>';
 
   switch (applicationStatus) {
     case 'active':
       icon = ':arrow_right:';
+      color = '#439FE0';
       message = candidateName + ' (' + jobName + ') was just updated to ' + interviewStage + ' (' + interviewStatus + ').\n' + applicationGreenhouseLink;
       break;
     case 'rejected':
       icon = ':no_good:';
+      color = 'danger';
       message = candidateName + ' (' + jobName + ') was just rejected.\n' + applicationGreenhouseLink;
       break;
     case 'hired':
       icon = ':raised_hands:';
+      color = 'good';
       message = candidateName + ' (' + jobName + ') was just hired!\n' + applicationGreenhouseLink;
       break;
     default:
