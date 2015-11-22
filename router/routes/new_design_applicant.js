@@ -26,13 +26,14 @@ router.post('/', function (req, res) {
 
   // Job and application info
   var jobName = jobs[0].name;
+  var jobId = jobs[0].id;
   var applicationId = application.id;
   var applicationSource = application.source.public_name;
   var designJobs = [
-    'Head of Design', // job_id: 123548
-    'Product Designer', // job_id: 122173
-    'User Experience Researcher', // job_id: 123549
-    'Communication Designer' // job_id: 123547
+    123548, // job_name: 'Head of Design'
+    122173, // job_name: 'Product Designer'
+    123549, // job_name: 'User Experience Researcher'
+    123547 // job_name: 'Communication Designer'
   ];
 
   // For Slack content string formation
@@ -71,7 +72,7 @@ router.post('/', function (req, res) {
   });
 
   // Check if job is one of the designJobs before sending to Slack
-  isDesignJob = designJobs.indexOf(jobName) > -1;
+  isDesignJob = designJobs.indexOf(jobId) > -1;
   if (isDesignJob) {
     slack.send({
       channel: '#design-candidates',
