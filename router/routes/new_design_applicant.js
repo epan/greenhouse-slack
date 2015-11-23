@@ -52,24 +52,25 @@ router.post('/', function (req, res) {
             candidateEmailLink + '\n' +
             applicationGreenhouseLink;
 
-  // Send the formated message to Slackbot incoming webhook
-  slack.send({
-    icon_emoji: ':eyes:',
-    username: botTitle,
-    text: message,
-    attachments: [
-      {
-        fallback: 'Check Greenhouse for more details.',
-        fields: [
-          {
-            title: 'Application',
-            value: summary,
-            short: true
-          }
-        ]
-      }
-    ]
-  });
+  // Send all new job applications to slackbot
+  //
+  // slack.send({
+  //   icon_emoji: ':eyes:',
+  //   username: botTitle,
+  //   text: message,
+  //   attachments: [
+  //     {
+  //       fallback: 'Check Greenhouse for more details.',
+  //       fields: [
+  //         {
+  //           title: 'Application',
+  //           value: summary,
+  //           short: true
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // });
 
   // Check if job is one of the designJobs before sending to Slack
   isDesignJob = designJobs.indexOf(jobId) > -1;
