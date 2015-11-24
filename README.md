@@ -9,7 +9,7 @@
 
 ## How to get it
 
-1. Make sure you have Developer Permissions in Greenhouse so you can see and make webhooks in Greenhouse
+1. Make sure you have Developer Permissions so you can see and make webhooks in Greenhouse
 2. Make sure you have permissions to create and modify Slack integrations
 3. Set up a webhook in Greenhouse for both New Application Submitted and Application Status Change
 4. Set up a hosting thing like Heroku
