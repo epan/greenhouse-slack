@@ -3,7 +3,7 @@
 
 ## What it does
 
-1. Takes for webhook events in Greenhouse
+1. Takes webhook events in Greenhouse
 2. Forms a Slack message and posts it to a slack channel
 3. Can filter for specific job IDs
 
