@@ -5,6 +5,9 @@ var router = express.Router();
 
 // Variables for Slack incoming webhook url
 var GREENHOUSE_EVENT_SLACK_WEBHOOK_URL = process.env.GREENHOUSE_EVENT_SLACK_WEBHOOK_URL;
+var GREENHOUSE_JOB_IDS = process.env.GREENHOUSE_JOB_IDS;
+var SLACK_CHANNEL_NAME = process.env.SLACK_CHANNEL_NAME;
+
 var slack = require('slack-notify')(GREENHOUSE_EVENT_SLACK_WEBHOOK_URL);
 
 router.post('/', function (req, res) {
@@ -30,12 +33,7 @@ router.post('/', function (req, res) {
   var interviewStatus = application.current_stage.interviews[0].status;
 
   // Jobs to filter for
-  var designJobs = [
-    123548, // job_name: 'Head of Design'
-    122173, // job_name: 'Product Designer'
-    123549, // job_name: 'User Experience Researcher'
-    123547 // job_name: 'Communication Designer'
-  ];
+  var jobIDs = GREENHOUSE_JOB_IDS.split(",").map(id => parseInt(id))
   var isDesignJob = false;
 
   // String mutation for formatting message to Slack
@@ -67,13 +65,13 @@ router.post('/', function (req, res) {
   console.log(message);
 
   // Check if job is a design job then send update to Slack
-  isDesignJob = designJobs.indexOf(jobId) > -1;
+  isDesignJob = jobIDs.indexOf(jobId) > -1;
 
   console.log(isDesignJob);
 
   if (isDesignJob) {
     slack.send({
-      channel: '#design-candidates',
+      channel: SLACK_CHANNEL_NAME,
       color: '#7CD197',
       icon_emoji: icon,
       username: 'Applicant Status Change',
