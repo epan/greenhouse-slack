@@ -5,6 +5,9 @@ var router = express.Router();
 
 // Variables for Slack incoming webhook url
 var GREENHOUSE_EVENT_SLACK_WEBHOOK_URL = process.env.GREENHOUSE_EVENT_SLACK_WEBHOOK_URL;
+var GREENHOUSE_JOB_IDS = process.env.GREENHOUSE_JOB_IDS;
+var SLACK_CHANNEL_NAME = process.env.SLACK_CHANNEL_NAME;
+
 var slack = require('slack-notify')(GREENHOUSE_EVENT_SLACK_WEBHOOK_URL);
 
 router.post('/', function (req, res) {
@@ -29,13 +32,8 @@ router.post('/', function (req, res) {
   var jobId = jobs[0].id;
   var applicationId = application.id;
   var applicationSource = application.source.public_name;
-  var designJobs = [
-    123548, // job_name: 'Head of Design'
-    122173, // job_name: 'Product Designer'
-    123549, // job_name: 'User Experience Researcher'
-    123547 // job_name: 'Communication Designer'
-  ];
-
+  var jobIDs = GREENHOUSE_JOB_IDS.split(",").map(id => parseInt(id))
+  
   // For Slack content string formation
   var botTitle = '';
   var message = '';
@@ -52,31 +50,11 @@ router.post('/', function (req, res) {
             candidateEmailLink + '\n' +
             applicationGreenhouseLink;
 
-  // Send all new job applications to slackbot
-  //
-  // slack.send({
-  //   icon_emoji: ':eyes:',
-  //   username: botTitle,
-  //   text: message,
-  //   attachments: [
-  //     {
-  //       fallback: 'Check Greenhouse for more details.',
-  //       fields: [
-  //         {
-  //           title: 'Application',
-  //           value: summary,
-  //           short: true
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // });
-
-  // Check if job is one of the designJobs before sending to Slack
-  isDesignJob = designJobs.indexOf(jobId) > -1;
+  // Check if job is one of the jobIDs before sending to Slack
+  isDesignJob = jobIDs.indexOf(jobId) > -1;
   if (isDesignJob) {
     slack.send({
-      channel: '#design-candidates',
+      channel: SLACK_CHANNEL_NAME,
       color: '#7CD197',
       icon_emoji: ':eyes:',
       username: botTitle,
